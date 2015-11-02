@@ -2,7 +2,6 @@
 #  Jesse Wallace (c0deous) (c) 2014
 
 import os, sys, random
-from termcolor import colored
 from optparse import OptionParser
 
 # Define/Parse Args
@@ -12,27 +11,51 @@ parser.add_option('-v', '--verbose', action='store_true', dest='verbose', help='
 
 (options, args) = parser.parse_args()
 
+# ANSI Colors #
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+def colored(text, color):
+    try: 
+        colorcode = getattr(bcolors, color)
+        return colorcode + text + bcolors.ENDC
+    except AttributeError:
+        return text
+
+# Input Method Switcher #
+def inputm(textct):
+    try:
+        raw_input(textct)
+    except NameError:
+        input(textct)
+
 # Dice ASCII Art Cache
 dice_1 = colored("""
  _____
 |     |
 |  X  |
 |     |
- -----""", 'red')
+ -----""", 'FAIL')
 
 dice_2 = colored(""" 
  _____
 |   X |
 |     |
 | X   |
- -----""", 'red')
+ -----""", 'OKBLUE')
 
 dice_3 = colored(""" 
  _____
 |   X |
 |  X  |
 | X   |
- ----- """, 'yellow')
+ ----- """, 'OKGREEN')
 
 dice_4 = """ 
  _____
@@ -46,14 +69,14 @@ dice_5 = colored("""
 |X   X|
 |  X  |
 |X   X|
- -----""", 'blue')
+ -----""", 'WARNING')
 
 dice_6 = colored("""
  _____  
 |X X X|
 |     |
 |X X X|
- ----- """, 'green')
+ ----- """, 'HEADER')
 
 # Get ASCII Function
 def get_ascii_dice(num):
@@ -91,17 +114,17 @@ def roll_two_dice():
 
 def roll_one_die_verbose():
     rollednum = random.randint(1, 6)
-    input("/:: PRESS ENTER TO ROLL ::\\")
-    print
+    inputm("/:: PRESS ENTER TO ROLL ::\\")
+    print(' ')
     print(colored('|-----------------------|', 'blue'))
-    print
+    print(' ')
     print(get_ascii_dice(rollednum))
-    print
+    print(' ')
     print('Rolled a ' + str(rollednum))
     print(colored('|-----------------------|', 'blue'))
 
 def roll_two_dice_verbose():
-        input("/:: PRESS ENTER TO ROLL ::\\")
+        inputm("/:: PRESS ENTER TO ROLL ::\\")
         print
         print('Dice 1')
         print(colored('|-----------------------|', 'blue'))
@@ -111,7 +134,7 @@ def roll_two_dice_verbose():
         print('Rolled a ' + colored(str(rollednum1), 'magenta') + ' for die 1.')
         print(colored('|-----------------------|', 'blue'))
         print
-        input("/:: PRESS ENTER TO ROLL ::\\")
+        inputm("/:: PRESS ENTER TO ROLL ::\\")
         print
         print('Dice 2')
         print(colored('|-----------------------|', 'blue'))
